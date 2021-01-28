@@ -65,7 +65,7 @@ return [
         Route::get('/user/{login}', [ApiUserController::class, 'profile'])
             ->addMiddleware(FormatDataResponseAsJson::class)
             ->name('api/user/profile'),
-    ])->addMiddleware(ApiDataWrapper::class)->addMiddleware(FormatDataResponseAsXml::class),
+    ])->addMiddleware(FormatDataResponseAsXml::class)->addMiddleware(ApiDataWrapper::class),
 
     // Blog routes
     Group::create('/blog', [
@@ -106,10 +106,11 @@ return [
     // Swagger routes
     Group::create('/swagger', [
         Route::get('')
-            ->addMiddleware(fn (SwaggerUi $swaggerUi) => $swaggerUi->withJsonUrl('/swagger/json-url'))
             ->addMiddleware(FormatDataResponseAsHtml::class)
+            ->addMiddleware(fn (SwaggerUi $swaggerUi) => $swaggerUi->withJsonUrl('/swagger/json-url'))
             ->name('swagger/index'),
         Route::get('/json-url')
+            ->addMiddleware(FormatDataResponseAsJson::class)
             ->addMiddleware(static function (SwaggerJson $swaggerJson) {
                 return $swaggerJson
                     // Uncomment cache for production environment
@@ -117,7 +118,6 @@ return [
                     ->withAnnotationPaths([
                         '@src/Controller', // Path to API controllers
                     ]);
-            })
-            ->addMiddleware(FormatDataResponseAsJson::class),
+            }),
     ]),
 ];

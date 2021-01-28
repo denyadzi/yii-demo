@@ -18,10 +18,10 @@ return [
                 return ($injector->make(MiddlewareDispatcher::class))
                     ->withMiddlewares(
                         [
-                            Router::class,
-                            CsrfMiddleware::class,
-                            SessionMiddleware::class,
                             ErrorCatcher::class,
+                            SessionMiddleware::class,
+                            CsrfMiddleware::class,
+                            Router::class,
                         ]
                     );
             },
